@@ -58,3 +58,31 @@ end
 
 # that `get_character_movies_from_api` method is probably pretty long. Does it do more than one job?
 # can you split it up into helper methods?
+
+def next_page(character, count)
+  next_page = "https://www.swapi.co/api/people/?page=" + count.to_s
+  find_han_solo("Han Solo", next_page, count)
+
+end
+
+count = 1
+def find_han_solo(character, url, count)
+  all_characters = RestClient.get(url)
+  character_hash = JSON.parse(all_characters)
+  
+  character_hash["results"].each do |names|
+    if names["name"] == character
+      print names["name"]
+      binding.pry
+    end
+  count += 1
+  next_page(character, count)
+  end
+end
+
+next_page("Han Solo", 1)
+#find_han_solo("Han Solo", 'http://www.swapi.co/api/people/', count)
+
+
+
+
